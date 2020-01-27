@@ -109,6 +109,10 @@ object JvmBackendFacade {
         // We need to compile all files we reference in Klibs
         irModuleFragment.files.addAll(dependencies.flatMap { it.files })
 
+        if (state.configuration.getBoolean(org.jetbrains.kotlin.config.JVMConfigurationKeys.YOURKIT_SNAPSHOT)) {
+            println("YourKit snapshot between psi2ir and JVM IR lowering: ${org.jetbrains.kotlin.utils.YourKit.captureMemorySnapshot()}")
+        }
+
         doGenerateFilesInternal(
             state, irModuleFragment, psi2irContext.symbolTable, psi2irContext.sourceManager, phaseConfig,
             irProviders, extensions, ::DescriptorMetadataSerializer
@@ -136,7 +140,36 @@ object JvmBackendFacade {
             context.typeMapper.mapType(context.referenceClass(descriptor).defaultType)
         }
 
+        val snapshot = state.configuration.getBoolean(org.jetbrains.kotlin.config.JVMConfigurationKeys.YOURKIT_SNAPSHOT)
+
+        /*
+        if (snapshot) org.jetbrains.kotlin.utils.YourKit.startTracing(null)
+        */
+
         JvmLower(context).lower(irModuleFragment)
+
+        /*
+        val date = java.text.SimpleDateFormat("yyMMdd-HHmm").format(java.util.Date())
+        val heapDumpFile = java.io.File(System.getProperty("user.home") + "/Snapshots/kotlinc-$date.hprof")
+        heapDumpFile.parentFile.mkdirs()
+        java.lang.management.ManagementFactory.newPlatformMXBeanProxy(
+            java.lang.management.ManagementFactory.getPlatformMBeanServer(),
+            "com.sun.management:type=HotSpotDiagnostic",
+            com.sun.management.HotSpotDiagnosticMXBean::class.java
+        ).dumpHeap(heapDumpFile.path, true)
+        println("Heap dumped to $heapDumpFile")
+        */
+
+        /*
+        if (snapshot) {
+            org.jetbrains.kotlin.utils.YourKit.stopCpuProfiling()
+            println("YourKit performance snapshot dumped to ${org.jetbrains.kotlin.utils.YourKit.capturePerformanceSnapshot()}")
+        }
+        */
+
+        if (snapshot) {
+            println("YourKit snapshot between JVM IR lowering and codegen: ${org.jetbrains.kotlin.utils.YourKit.captureMemorySnapshot()}")
+        }
 
         for (generateMultifileFacade in listOf(true, false)) {
             for (irFile in irModuleFragment.files) {

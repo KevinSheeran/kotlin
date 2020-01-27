@@ -44,6 +44,10 @@ object DefaultCodegenFactory : CodegenFactory {
         val filesInPackages = MultiMap<FqName, KtFile>()
         val filesInMultifileClasses = MultiMap<FqName, KtFile>()
 
+        if (state.configuration.getBoolean(org.jetbrains.kotlin.config.JVMConfigurationKeys.YOURKIT_SNAPSHOT)) {
+            println("YourKit snapshot between frontend and JVM backend: ${org.jetbrains.kotlin.utils.YourKit.captureMemorySnapshot()}")
+        }
+
         for (file in files) {
             val fileClassInfo = JvmFileClassUtil.getFileClassInfoNoResolve(file)
 
