@@ -8133,6 +8133,177 @@ public class DiagnosticsTestGenerated extends AbstractDiagnosticsTestWithFirVali
             public void testVariableInvoke() throws Exception {
                 runTest("compiler/testData/diagnostics/tests/extensions/variableInvoke.kt");
             }
+
+            @TestMetadata("compiler/testData/diagnostics/tests/extensions/additionalReceiverObjects")
+            @TestDataPath("$PROJECT_ROOT")
+            @RunWith(JUnit3RunnerWithInners.class)
+            public static class AdditionalReceiverObjects extends AbstractDiagnosticsTestWithFirValidation {
+                private void runTest(String testDataFilePath) throws Exception {
+                    KotlinTestUtils.runTest(this::doTest, this, testDataFilePath);
+                }
+
+                public void testAllFilesPresentInAdditionalReceiverObjects() throws Exception {
+                    KotlinTestUtils.assertAllTestsPresentByMetadataWithExcluded(this.getClass(), new File("compiler/testData/diagnostics/tests/extensions/additionalReceiverObjects"), Pattern.compile("^(.*)\\.kts?$"), Pattern.compile("^(.+)\\.fir\\.kts?$"), true);
+                }
+
+                @TestMetadata("compiler/testData/diagnostics/tests/extensions/additionalReceiverObjects/classes")
+                @TestDataPath("$PROJECT_ROOT")
+                @RunWith(JUnit3RunnerWithInners.class)
+                public static class Classes extends AbstractDiagnosticsTestWithFirValidation {
+                    private void runTest(String testDataFilePath) throws Exception {
+                        KotlinTestUtils.runTest(this::doTest, this, testDataFilePath);
+                    }
+
+                    public void testAllFilesPresentInClasses() throws Exception {
+                        KotlinTestUtils.assertAllTestsPresentByMetadataWithExcluded(this.getClass(), new File("compiler/testData/diagnostics/tests/extensions/additionalReceiverObjects/classes"), Pattern.compile("^(.*)\\.kts?$"), Pattern.compile("^(.+)\\.fir\\.kts?$"), true);
+                    }
+
+                    @TestMetadata("simple.kt")
+                    public void testSimple() throws Exception {
+                        runTest("compiler/testData/diagnostics/tests/extensions/additionalReceiverObjects/classes/simple.kt");
+                    }
+                }
+
+                @TestMetadata("compiler/testData/diagnostics/tests/extensions/additionalReceiverObjects/functions")
+                @TestDataPath("$PROJECT_ROOT")
+                @RunWith(JUnit3RunnerWithInners.class)
+                public static class Functions extends AbstractDiagnosticsTestWithFirValidation {
+                    private void runTest(String testDataFilePath) throws Exception {
+                        KotlinTestUtils.runTest(this::doTest, this, testDataFilePath);
+                    }
+
+                    public void testAllFilesPresentInFunctions() throws Exception {
+                        KotlinTestUtils.assertAllTestsPresentByMetadataWithExcluded(this.getClass(), new File("compiler/testData/diagnostics/tests/extensions/additionalReceiverObjects/functions"), Pattern.compile("^(.*)\\.kts?$"), Pattern.compile("^(.+)\\.fir\\.kts?$"), true);
+                    }
+
+                    @TestMetadata("simple.kt")
+                    public void testSimple() throws Exception {
+                        runTest("compiler/testData/diagnostics/tests/extensions/additionalReceiverObjects/functions/simple.kt");
+                    }
+                }
+            }
+
+            @TestMetadata("compiler/testData/diagnostics/tests/extensions/additionalReceivers")
+            @TestDataPath("$PROJECT_ROOT")
+            @RunWith(JUnit3RunnerWithInners.class)
+            public static class AdditionalReceivers extends AbstractDiagnosticsTestWithFirValidation {
+                private void runTest(String testDataFilePath) throws Exception {
+                    KotlinTestUtils.runTest(this::doTest, this, testDataFilePath);
+                }
+
+                public void testAllFilesPresentInAdditionalReceivers() throws Exception {
+                    KotlinTestUtils.assertAllTestsPresentByMetadataWithExcluded(this.getClass(), new File("compiler/testData/diagnostics/tests/extensions/additionalReceivers"), Pattern.compile("^(.*)\\.kts?$"), Pattern.compile("^(.+)\\.fir\\.kts?$"), true);
+                }
+
+                @TestMetadata("compiler/testData/diagnostics/tests/extensions/additionalReceivers/classes")
+                @TestDataPath("$PROJECT_ROOT")
+                @RunWith(JUnit3RunnerWithInners.class)
+                public static class Classes extends AbstractDiagnosticsTestWithFirValidation {
+                    private void runTest(String testDataFilePath) throws Exception {
+                        KotlinTestUtils.runTest(this::doTest, this, testDataFilePath);
+                    }
+
+                    public void testAllFilesPresentInClasses() throws Exception {
+                        KotlinTestUtils.assertAllTestsPresentByMetadataWithExcluded(this.getClass(), new File("compiler/testData/diagnostics/tests/extensions/additionalReceivers/classes"), Pattern.compile("^(.*)\\.kts?$"), Pattern.compile("^(.+)\\.fir\\.kts?$"), true);
+                    }
+
+                    @TestMetadata("genericOuterClass.kt")
+                    public void testGenericOuterClass() throws Exception {
+                        runTest("compiler/testData/diagnostics/tests/extensions/additionalReceivers/classes/genericOuterClass.kt");
+                    }
+
+                    @TestMetadata("multiple.kt")
+                    public void testMultiple() throws Exception {
+                        runTest("compiler/testData/diagnostics/tests/extensions/additionalReceivers/classes/multiple.kt");
+                    }
+
+                    @TestMetadata("outerClass.kt")
+                    public void testOuterClass() throws Exception {
+                        runTest("compiler/testData/diagnostics/tests/extensions/additionalReceivers/classes/outerClass.kt");
+                    }
+                }
+
+                @TestMetadata("compiler/testData/diagnostics/tests/extensions/additionalReceivers/functions")
+                @TestDataPath("$PROJECT_ROOT")
+                @RunWith(JUnit3RunnerWithInners.class)
+                public static class Functions extends AbstractDiagnosticsTestWithFirValidation {
+                    private void runTest(String testDataFilePath) throws Exception {
+                        KotlinTestUtils.runTest(this::doTest, this, testDataFilePath);
+                    }
+
+                    public void testAllFilesPresentInFunctions() throws Exception {
+                        KotlinTestUtils.assertAllTestsPresentByMetadataWithExcluded(this.getClass(), new File("compiler/testData/diagnostics/tests/extensions/additionalReceivers/functions"), Pattern.compile("^(.*)\\.kts?$"), Pattern.compile("^(.+)\\.fir\\.kts?$"), true);
+                    }
+
+                    @TestMetadata("insideDeclaration.kt")
+                    public void testInsideDeclaration() throws Exception {
+                        runTest("compiler/testData/diagnostics/tests/extensions/additionalReceivers/functions/insideDeclaration.kt");
+                    }
+
+                    @TestMetadata("manyReceivers.kt")
+                    public void testManyReceivers() throws Exception {
+                        runTest("compiler/testData/diagnostics/tests/extensions/additionalReceivers/functions/manyReceivers.kt");
+                    }
+
+                    @TestMetadata("noExplicitReceiver.kt")
+                    public void testNoExplicitReceiver() throws Exception {
+                        runTest("compiler/testData/diagnostics/tests/extensions/additionalReceivers/functions/noExplicitReceiver.kt");
+                    }
+
+                    @TestMetadata("plusMatrix.kt")
+                    public void testPlusMatrix() throws Exception {
+                        runTest("compiler/testData/diagnostics/tests/extensions/additionalReceivers/functions/plusMatrix.kt");
+                    }
+
+                    @TestMetadata("resolutionFailure.kt")
+                    public void testResolutionFailure() throws Exception {
+                        runTest("compiler/testData/diagnostics/tests/extensions/additionalReceivers/functions/resolutionFailure.kt");
+                    }
+
+                    @TestMetadata("this.kt")
+                    public void testThis() throws Exception {
+                        runTest("compiler/testData/diagnostics/tests/extensions/additionalReceivers/functions/this.kt");
+                    }
+
+                    @TestMetadata("typeParameterized.kt")
+                    public void testTypeParameterized() throws Exception {
+                        runTest("compiler/testData/diagnostics/tests/extensions/additionalReceivers/functions/typeParameterized.kt");
+                    }
+
+                    @TestMetadata("typeParameterizedList.kt")
+                    public void testTypeParameterizedList() throws Exception {
+                        runTest("compiler/testData/diagnostics/tests/extensions/additionalReceivers/functions/typeParameterizedList.kt");
+                    }
+
+                    @TestMetadata("withExplicitReceiver.kt")
+                    public void testWithExplicitReceiver() throws Exception {
+                        runTest("compiler/testData/diagnostics/tests/extensions/additionalReceivers/functions/withExplicitReceiver.kt");
+                    }
+
+                    @TestMetadata("withExplicitReceiverError.kt")
+                    public void testWithExplicitReceiverError() throws Exception {
+                        runTest("compiler/testData/diagnostics/tests/extensions/additionalReceivers/functions/withExplicitReceiverError.kt");
+                    }
+                }
+
+                @TestMetadata("compiler/testData/diagnostics/tests/extensions/additionalReceivers/properties")
+                @TestDataPath("$PROJECT_ROOT")
+                @RunWith(JUnit3RunnerWithInners.class)
+                public static class Properties extends AbstractDiagnosticsTestWithFirValidation {
+                    private void runTest(String testDataFilePath) throws Exception {
+                        KotlinTestUtils.runTest(this::doTest, this, testDataFilePath);
+                    }
+
+                    public void testAllFilesPresentInProperties() throws Exception {
+                        KotlinTestUtils.assertAllTestsPresentByMetadataWithExcluded(this.getClass(), new File("compiler/testData/diagnostics/tests/extensions/additionalReceivers/properties"), Pattern.compile("^(.*)\\.kts?$"), Pattern.compile("^(.+)\\.fir\\.kts?$"), true);
+                    }
+
+                    @TestMetadata("dp.kt")
+                    public void testDp() throws Exception {
+                        runTest("compiler/testData/diagnostics/tests/extensions/additionalReceivers/properties/dp.kt");
+                    }
+                }
+            }
         }
 
         @TestMetadata("compiler/testData/diagnostics/tests/funInterface")
