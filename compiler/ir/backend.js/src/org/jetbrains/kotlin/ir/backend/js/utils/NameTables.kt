@@ -414,7 +414,7 @@ class NameTables(
         }
 
         private fun makeSyntheticLabel(): String {
-            return "$SYNTHETIC_LOOP_LABEL\$$tmpLabelCounter"
+            return "$SYNTHETIC_LOOP_LABEL\$${tmpLabelCounter++}"
         }
     }
 
