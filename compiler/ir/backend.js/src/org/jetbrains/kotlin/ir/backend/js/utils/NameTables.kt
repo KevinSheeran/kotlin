@@ -11,7 +11,10 @@ import org.jetbrains.kotlin.ir.IrElement
 import org.jetbrains.kotlin.ir.backend.js.JsLoweredDeclarationOrigin
 import org.jetbrains.kotlin.ir.backend.js.lower.serialization.ir.JsManglerIr
 import org.jetbrains.kotlin.ir.declarations.*
+import org.jetbrains.kotlin.ir.expressions.IrBreak
+import org.jetbrains.kotlin.ir.expressions.IrExpression
 import org.jetbrains.kotlin.ir.expressions.IrLoop
+import org.jetbrains.kotlin.ir.expressions.IrWhen
 import org.jetbrains.kotlin.ir.types.isUnit
 import org.jetbrains.kotlin.ir.util.*
 import org.jetbrains.kotlin.ir.visitors.IrElementVisitorVoid
@@ -21,6 +24,7 @@ import org.jetbrains.kotlin.js.naming.isES5IdentifierPart
 import org.jetbrains.kotlin.js.naming.isES5IdentifierStart
 import org.jetbrains.kotlin.name.FqName
 import org.jetbrains.kotlin.utils.addToStdlib.ifNotEmpty
+import java.util.*
 
 fun <T> mapToKey(declaration: T): String {
     return with(JsManglerIr) {
@@ -357,6 +361,10 @@ class NameTables(
     inner class LocalNameGenerator(parentDeclaration: IrDeclaration) : IrElementVisitorVoid {
         val table = NameTable<IrDeclaration>(globalNames)
 
+        private val breakableDeque: Deque<IrExpression> = LinkedList()
+
+        var tmpLabelCounter = 0
+
         init {
             localNames[parentDeclaration] = table
         }
@@ -373,13 +381,40 @@ class NameTables(
             super.visitDeclaration(declaration)
         }
 
+        override fun visitBreak(jump: IrBreak) {
+            val loop = jump.loop
+            if (loop != breakableDeque.firstOrNull()) {
+                loop.label = makeSyntheticLabel()
+            }
+
+            super.visitBreak(jump)
+        }
+
+        override fun visitWhen(expression: IrWhen) {
+            breakableDeque.push(expression)
+
+            super.visitWhen(expression)
+
+            breakableDeque.pop()
+        }
+
         override fun visitLoop(loop: IrLoop) {
+            breakableDeque.push(loop)
+
+            super.visitLoop(loop)
+
+            breakableDeque.pop()
+
             val label = loop.label
+
             if (label != null) {
                 localLoopNames.declareFreshName(loop, label)
                 loopNames[loop] = localLoopNames.names[loop]!!
             }
-            super.visitLoop(loop)
+        }
+
+        private fun makeSyntheticLabel(): String {
+            return "$SYNTHETIC_LOOP_LABEL\$$tmpLabelCounter"
         }
     }
 
@@ -397,3 +432,5 @@ fun sanitizeName(name: String): String {
     val first = name.first().let { if (it.isES5IdentifierStart()) it else '_' }
     return first.toString() + name.drop(1).map { if (it.isES5IdentifierPart()) it else '_' }.joinToString("")
 }
+
+private const val SYNTHETIC_LOOP_LABEL = "\$l\$break"
