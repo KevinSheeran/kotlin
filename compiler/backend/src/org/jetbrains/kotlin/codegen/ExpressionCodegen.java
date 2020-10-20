@@ -1935,7 +1935,13 @@ public class ExpressionCodegen extends KtVisitor<StackValue, StackValue> impleme
 
             if (InlineClassesUtilsKt.isUnderlyingPropertyOfInlineClass(propertyDescriptor)) {
                 KotlinType propertyType = propertyDescriptor.getType();
-                return StackValue.underlyingValueOfInlineClass(typeMapper.mapType(propertyType), propertyType, receiver);
+                KotlinType inlineClassTypeToUnbox =
+                        context instanceof InlineLambdaContext
+                        ? null
+                        : CodegenUtil.receiverIsInlineClassWithAnyUnderlyingTypeAndIsLambdaParameter(resolvedCall, bindingContext);
+                return StackValue.underlyingValueOfInlineClass(
+                        typeMapper.mapType(propertyType), propertyType, receiver, inlineClassTypeToUnbox
+                );
             }
 
             Collection<ExpressionCodegenExtension> codegenExtensions = ExpressionCodegenExtension.Companion.getInstances(state.getProject());
