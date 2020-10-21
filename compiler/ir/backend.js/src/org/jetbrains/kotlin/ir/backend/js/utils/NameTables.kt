@@ -363,8 +363,6 @@ class NameTables(
 
         private val breakableDeque: Deque<IrExpression> = LinkedList()
 
-        var tmpLabelCounter = 0
-
         init {
             localNames[parentDeclaration] = table
         }
@@ -384,7 +382,7 @@ class NameTables(
         override fun visitBreak(jump: IrBreak) {
             val loop = jump.loop
             if (loop != breakableDeque.firstOrNull()) {
-                loop.label = makeSyntheticLabel()
+                persistLoopName(SYNTHETIC_LOOP_LABEL, loop)
             }
 
             super.visitBreak(jump)
@@ -408,21 +406,18 @@ class NameTables(
             val label = loop.label
 
             if (label != null) {
-                localLoopNames.declareFreshName(loop, label)
-                loopNames[loop] = localLoopNames.names[loop]!!
+                persistLoopName(label, loop)
             }
         }
 
-        private fun makeSyntheticLabel(): String {
-            return "$SYNTHETIC_LOOP_LABEL\$${tmpLabelCounter++}"
+        private fun persistLoopName(label: String, loop: IrLoop) {
+            localLoopNames.declareFreshName(loop, label)
+            loopNames[loop] = localLoopNames.names[loop]!!
         }
     }
 
     fun getNameForLoop(loop: IrLoop): String? =
-        if (loop.label == null)
-            null
-        else
-            loopNames[loop]!!
+        loopNames[loop]
 }
 
 
